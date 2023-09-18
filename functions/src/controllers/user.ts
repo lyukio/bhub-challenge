@@ -21,13 +21,14 @@ export class UserController {
         const userId = req.params.id
         if (!userId) return res.status(400).json({ "response": "userId is necessary" })
         const user = new User()
-        if (!await user.load(userId)) return res.status(400).json({ "response": "user not found", "userId": userId })
+        if (!await user.load(userId)) return res.status(400).json({ "response": "user not found", userId })
         user.fields.id = user.id
         return res.json({
             "user": user.fields,
         })
     }
 
+    // TODO: getUserOrders
     // async route_getOtherExampleExamplesJSON(req: Request, res: Response) {
     //     const otherExampleId = res.get("otherExampleId") || req.query.otherExampleId
     //     if (!otherExampleId) return res.status(400).json({ "response": "otherExampleId is necessary" })

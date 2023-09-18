@@ -55,7 +55,7 @@ export abstract class Base {
         const snap = await this.db.get()
         if (!snap) return null
         const docs: any[] = []
-        snap.docs.forEach((doc) => {
+        snap.docs.forEach(doc => {
             const fields = doc.data()
             fields.id = doc.id
             docs.push({ id: doc.id, fields })
@@ -69,7 +69,7 @@ export abstract class Base {
         const snap = await this.db.where(property, "==", value).get()
         if (!snap) return null
         const docs: any[] = []
-        snap.forEach((doc) => {
+        snap.forEach(doc => {
             const fields = doc.data()
             fields.id = doc.id
             docs.push({ id: doc.id, fields })
@@ -83,7 +83,7 @@ export abstract class Base {
         const snap = await this.db.get()
         if (!snap) return null
         const docs: any[] = []
-        snap.forEach((doc) => {
+        snap.forEach(doc => {
             const fields = doc.data()
             if (fields[property].every((item: any) => item !== value)) return
             fields.id = doc.id

@@ -1,9 +1,10 @@
 import { Base, Document } from "./base"
+import { Item } from "./item"
 
 export type OrderDocument = Document & {
     status: OrderStatus
-    productSnaps: Array<object>
-    userId?: string
+    itemIds: Array<string>
+    userId: string
 }
 
 export enum OrderStatus {
@@ -13,12 +14,12 @@ export enum OrderStatus {
 
 export class Order extends Base {
     fields: OrderDocument
-    constructor(fields = { status: OrderStatus.WAITING_PAYMENT, productSnaps: [], userId: "" }) {
+    constructor(fields = { status: OrderStatus.WAITING_PAYMENT, itemIds: [], userId: "" }) {
         super("orders")
 
         this.fields = {
             status: fields.status,
-            productSnaps: fields.productSnaps,
+            itemIds: fields.itemIds,
             userId: fields.userId,
         }
         for (const field in this.fields) {
@@ -33,5 +34,29 @@ export class Order extends Base {
 
     async save() {
         return await super.save()
+    }
+
+    async items() {
+        const items = []
+        for (const itemId of this.fields.itemIds) {
+            const item = await new Item().load(itemId)
+            if (item) items.push(item)
+        }
+        return items
+    }
+
+    async products() {
+        const products = []
+        for (const itemId of this.fields.itemIds) {
+            console.log("this.fields: ", this.fields)
+            const itemInstance = new Item()
+            const item = await itemInstance.load(itemId)
+            console.log("item: ", item)
+            if (!item) continue
+            const product = await item.product()
+            if (!product) continue
+            products.push(product)
+        }
+        return products
     }
 }

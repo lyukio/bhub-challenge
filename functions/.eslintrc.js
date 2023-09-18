@@ -46,5 +46,6 @@ module.exports = {
     "linebreak-style": 0,
     "semi": [2, "never"],
     "new-cap": 0,
+    "arrow-parens": ["error", "as-needed"],
   },
 }
