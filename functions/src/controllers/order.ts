@@ -22,14 +22,17 @@ export class OrderController {
     }
 
     async getActions(order: Order) {
-        console.log("-- starting getActions")
         const actions: Array<Action> = []
         const products = await order.products()
-        console.log("products: ", products)
-        if (products.length === 0) return actions
-        const correlationActions = await new CorrelationAction().loadByProducts(products)
+        const categories = await order.categories()
+        if (products.length === 0 && categories.length === 0) return actions
+        const correlationActions: CorrelationAction[] = await new CorrelationAction().loadByProducts(products)
+        const categoriesCorrelationActions: CorrelationAction[] = await new CorrelationAction().loadByCategories(categories)
+        correlationActions.push(...categoriesCorrelationActions)
         for (const correlationAction of correlationActions) {
-            const action = await correlationAction.action()
+            const instanceCorrelationAction = await new CorrelationAction().load(correlationAction.id)
+            if (!instanceCorrelationAction) continue
+            const action = await instanceCorrelationAction.action()
             if (action) actions.push(action)
         }
         return actions

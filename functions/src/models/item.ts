@@ -1,4 +1,5 @@
 import { Base, Document } from "./base"
+import { Category } from "./category"
 import { Product } from "./product"
 
 export type ItemDocument = Document & {
@@ -35,5 +36,14 @@ export class Item extends Base {
 
     async product() {
         return await new Product().load(this.fields.productId)
+    }
+
+    async categories() {
+        const categories = []
+        for (const categoryId of this.fields.categoryIds) {
+            const category = await new Category().load(categoryId)
+            if (category) categories.push(category)
+        }
+        return categories
     }
 }

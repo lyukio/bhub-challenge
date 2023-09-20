@@ -1,5 +1,6 @@
 import { Action } from "./action"
 import { Base, Document } from "./base"
+import { Category } from "./category"
 import { Product } from "./product"
 
 export type CorrelationActionDocument = Document & {
@@ -37,24 +38,27 @@ export class CorrelationAction extends Base {
         return await super.save()
     }
 
-    async loadByProducts(products: Array<Product>, loadByCategory = true) {
+    async loadByProducts(products: Array<Product>, loadByCategory = true): Promise<Array<CorrelationAction>> {
         const correlationActions: Array<CorrelationAction> = []
         for (const product of products) {
             const productCorrelationAction = await this.loadByEntity(EntityTypes.PRODUCT, product.id)
             if (productCorrelationAction) correlationActions.push(productCorrelationAction)
-            if (!loadByCategory) continue
-            const categories = await product.categories()
-            for (const category of categories) {
-                const categoryCorrelationAction = await this.loadByEntity(EntityTypes.CATEGORY, category.id)
-                if (categoryCorrelationAction) correlationActions.push(categoryCorrelationAction)
-            }
+        }
+        return correlationActions
+    }
+
+    async loadByCategories(categories: Array<Category>) {
+        const correlationActions: Array<CorrelationAction> = []
+        for (const category of categories) {
+            const categoryCorrelationAction = await this.loadByEntity(EntityTypes.CATEGORY, category.id)
+            if (categoryCorrelationAction) correlationActions.push(categoryCorrelationAction)
         }
         return correlationActions
     }
 
     async loadByEntity(entityType: EntityTypes, entityId: string) {
         const correlationAction = await this.loadByProperty("entityId", entityId)
-        if (correlationAction?.entity === entityType) return correlationAction
+        if (correlationAction?.fields?.entity === entityType) return correlationAction
         return undefined
     }
 

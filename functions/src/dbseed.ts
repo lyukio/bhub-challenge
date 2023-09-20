@@ -1,41 +1,27 @@
 import * as admin from "firebase-admin"
 
 export const seedDB = async (db: admin.firestore.Firestore) => {
-  db.collection("users").listDocuments().then(val => {
+  const snap = await db.collection("seeds").get()
+  if (snap.size) return
+  db.collection("seeds").add({
+    seeded: true,
+  })
+  const collections = [
+    "users",
+    "categories",
+    "products",
+    "items",
+    "orders",
+    "actions",
+    "correlationActions",
+  ]
+  for (const collection of collections) {
+    await db.collection(collection).listDocuments().then(val => {
       val.forEach(val => {
           val.delete()
       })
-  })
-  db.collection("categories").listDocuments().then(val => {
-    val.forEach(val => {
-        val.delete()
     })
-  })
-  db.collection("products").listDocuments().then(val => {
-    val.forEach(val => {
-        val.delete()
-    })
-  })
-  db.collection("items").listDocuments().then(val => {
-    val.forEach(val => {
-        val.delete()
-    })
-  })
-  db.collection("orders").listDocuments().then(val => {
-    val.forEach(val => {
-        val.delete()
-    })
-  })
-  db.collection("actions").listDocuments().then(val => {
-    val.forEach(val => {
-        val.delete()
-    })
-  })
-  db.collection("correlationActions").listDocuments().then(val => {
-    val.forEach(val => {
-        val.delete()
-    })
-  })
+  }
 
   db.collection("users").add({
     name: "Rogério Fictício",
@@ -90,16 +76,28 @@ export const seedDB = async (db: admin.firestore.Firestore) => {
     createdAt: new Date(),
   })
 
-  const actionRef = await db.collection("actions").add({
+  const duplicatedDeliveryNoteAction = await db.collection("actions").add({
     type: "duplicated delivery note",
     category: "livro",
+    desc: "Gerar guia de remessa duplicada na compra de livros",
+    createdAt: new Date(),
+  })
+  const deliveryNoteAction = await db.collection("actions").add({
+    type: "delivery note",
+    category: "físico",
     desc: "Gerar guia de remessa duplicada na compra de livros",
     createdAt: new Date(),
   })
   db.collection("correlationActions").add({
     entity: "category",
     entityId: bookCategory.id,
-    actionId: actionRef.id,
+    actionId: duplicatedDeliveryNoteAction.id,
+    createdAt: new Date(),
+  })
+  db.collection("correlationActions").add({
+    entity: "category",
+    entityId: physicalCategory.id,
+    actionId: deliveryNoteAction.id,
     createdAt: new Date(),
   })
 }

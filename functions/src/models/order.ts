@@ -14,7 +14,7 @@ export enum OrderStatus {
 
 export class Order extends Base {
     fields: OrderDocument
-    constructor(fields = { status: OrderStatus.WAITING_PAYMENT, itemIds: [], userId: "" }) {
+    constructor(fields: OrderDocument = { status: OrderStatus.WAITING_PAYMENT, itemIds: [], userId: "" }) {
         super("orders")
 
         this.fields = {
@@ -48,15 +48,26 @@ export class Order extends Base {
     async products() {
         const products = []
         for (const itemId of this.fields.itemIds) {
-            console.log("this.fields: ", this.fields)
             const itemInstance = new Item()
             const item = await itemInstance.load(itemId)
-            console.log("item: ", item)
             if (!item) continue
             const product = await item.product()
             if (!product) continue
             products.push(product)
         }
         return products
+    }
+
+    async categories() {
+        const categories = []
+        for (const itemId of this.fields.itemIds) {
+            const itemInstance = new Item()
+            const item = await itemInstance.load(itemId)
+            if (!item) continue
+            const itemCategories = await item.categories()
+            if (!itemCategories) continue
+            categories.push(...itemCategories)
+        }
+        return categories
     }
 }
