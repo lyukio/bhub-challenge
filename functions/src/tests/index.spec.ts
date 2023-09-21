@@ -1,4 +1,3 @@
-import "../setup"
 import { agent as request } from "supertest"
 
 import { main as app } from "../index"
@@ -13,7 +12,6 @@ describe("order", () => {
         }
         const user = new User(userDto)
         await user.create()
-        console.log("user: ", user)
     })
 
     describe("create order", () => {

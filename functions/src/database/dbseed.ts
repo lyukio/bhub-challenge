@@ -1,4 +1,3 @@
-import "../setup"
 import { db } from "../main"
 
 (async () => {
