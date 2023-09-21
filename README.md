@@ -13,7 +13,7 @@ Node v16.20.1
 Estando dentro da pasta functions:
 ```
 cd functions
-```.
+```
 
 Execute o seguinte comando:
 
