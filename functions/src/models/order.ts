@@ -14,16 +14,17 @@ export enum OrderStatus {
 
 export class Order extends Base {
     fields: OrderDocument
-    constructor(fields: OrderDocument = { status: OrderStatus.WAITING_PAYMENT, itemIds: [], userId: "" }) {
+    constructor(
+        status: OrderStatus = OrderStatus.WAITING_PAYMENT,
+        itemIds: Array<string> = [],
+        userId = "",
+    ) {
         super("orders")
 
         this.fields = {
-            status: fields.status,
-            itemIds: fields.itemIds,
-            userId: fields.userId,
-        }
-        for (const field in this.fields) {
-            if (this.fields[field] === undefined) delete this.fields[field]
+            status,
+            itemIds,
+            userId,
         }
     }
 

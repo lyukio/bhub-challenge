@@ -1,9 +1,11 @@
-import * as admin from "firebase-admin"
+import "../setup"
+import { db } from "../main"
 
-export const seedDB = async (db: admin.firestore.Firestore) => {
+(async () => {
+  console.log("-- starting seeds")
   const snap = await db.collection("seeds").get()
   if (snap.size) return
-  db.collection("seeds").add({
+  await db.collection("seeds").add({
     seeded: true,
   })
   const collections = [
@@ -16,14 +18,11 @@ export const seedDB = async (db: admin.firestore.Firestore) => {
     "correlationActions",
   ]
   for (const collection of collections) {
-    await db.collection(collection).listDocuments().then(val => {
-      val.forEach(val => {
-          val.delete()
-      })
-    })
+    const val = await db.collection(collection).listDocuments()
+    await Promise.all(val.map(val => val.delete()))
   }
 
-  db.collection("users").add({
+  await db.collection("users").add({
     name: "Rogério Fictício",
     email: "rogerio.fictício@email.com",
     address: "endereço fictício",
@@ -55,20 +54,20 @@ export const seedDB = async (db: admin.firestore.Firestore) => {
     categoryIds: [bookCategory.id, physicalCategory.id],
     createdAt: new Date(),
   })
-  db.collection("products").add({
+  await db.collection("products").add({
     price: 500.90,
     title: "Microondas",
     categoryIds: [physicalCategory.id, eletroCategory.id],
     createdAt: new Date(),
   })
-  db.collection("products").add({
+  await db.collection("products").add({
     price: 50.90,
     title: "Camiseta personalizada",
     categoryIds: [clothingCategory.id],
     createdAt: new Date(),
   })
 
-  db.collection("items").add({
+  await db.collection("items").add({
     qt: 1,
     price: 150.50,
     productId: product.id,
@@ -88,16 +87,17 @@ export const seedDB = async (db: admin.firestore.Firestore) => {
     desc: "Gerar guia de remessa duplicada na compra de livros",
     createdAt: new Date(),
   })
-  db.collection("correlationActions").add({
+  await db.collection("correlationActions").add({
     entity: "category",
     entityId: bookCategory.id,
     actionId: duplicatedDeliveryNoteAction.id,
     createdAt: new Date(),
   })
-  db.collection("correlationActions").add({
+  await db.collection("correlationActions").add({
     entity: "category",
     entityId: physicalCategory.id,
     actionId: deliveryNoteAction.id,
     createdAt: new Date(),
   })
-}
+  console.log("-- seeds successfully done")
+})()

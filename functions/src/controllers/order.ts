@@ -6,7 +6,13 @@ import { Action } from "../models/action"
 export class OrderController {
     async route_postJSON(req: Request, res: Response) {
         try {
-            const order = new Order(req.body)
+            const itemIds = req.body.itemIds
+            const userId = req.body.userId
+            if (!userId || !Array.isArray(itemIds) || itemIds.length === 0) {
+                return res.status(400).json({ "response": "userId and itemIds must be provided" })
+            }
+            const { status = "" } = req.body
+            const order = new Order(status, itemIds, userId)
             if (!await order.create()) return res.status(422).json({ "response": "error on creating order" })
             const actions: Array<Action> = await this.getActions(order)
             await this.triggerActions(actions)

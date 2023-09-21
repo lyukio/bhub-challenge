@@ -1,16 +1,19 @@
+import "../setup"
 import { agent as request } from "supertest"
+
 import { main as app } from "../index"
-import { User } from "../models/user"
+import { User, UserDocument } from "../models/user"
 
 describe("order", () => {
     beforeAll(async () => {
-        const userDto = {
+        const userDto: UserDocument = {
             "name": "fake-name",
             "email": "fake@email.com",
             "address": "fake-address",
         }
         const user = new User(userDto)
         await user.create()
+        console.log("user: ", user)
     })
 
     describe("create order", () => {
@@ -24,7 +27,11 @@ describe("order", () => {
             const response = await request(app).post("/orders").send(dto)
 
             expect(response.status).toBe(200)
-            expect(response.text).toEqual("c==3")
+            expect(response.body).toEqual(
+                expect.objectContaining({
+                    order: dto,
+                })
+            )
         })
     })
 })

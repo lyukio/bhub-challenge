@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { User } from "../models/user"
+import { User, UserDocument } from "../models/user"
 
 export class UserController {
     async route_postJSON(req: Request, res: Response) {
@@ -20,7 +20,7 @@ export class UserController {
     async route_getJSON(req: Request, res: Response) {
         const userId = req.params.id
         if (!userId) return res.status(400).json({ "response": "userId is necessary" })
-        const user = new User()
+        const user = new User({} as UserDocument)
         if (!await user.load(userId)) return res.status(400).json({ "response": "user not found", userId })
         user.fields.id = user.id
         return res.json({

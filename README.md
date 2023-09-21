@@ -54,7 +54,9 @@ E execute o seguinte comando:
 firebase emulators:start
 ```
 
-Dica, você pode deixar o comando `tsc -w` em um terminal (na pasta `functions`) enquanto roda `firebase emulators:start` em outro (na pasta raiz do projeto)
+Se alguma porta estiver sendo usada, você pode alterar para usar outras no arquivo `firebase.json`
+
+Dica: você pode deixar o comando `tsc -w` em um terminal (na pasta `functions`) enquanto roda `firebase emulators:start` em outro (na pasta raiz do projeto)
 
 ## 🛠️ Construído com
 
