@@ -9,7 +9,7 @@ export type UserDocument = Document & {
 
 export class User extends Base {
     fields: UserDocument
-    constructor(fields: UserDocument) {
+    constructor(fields = {} as UserDocument) {
         super("users")
 
         this.fields = {

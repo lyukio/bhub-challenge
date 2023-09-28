@@ -6,7 +6,7 @@ export type CategoryDocument = Document & {
 
 export class Category extends Base {
     fields: CategoryDocument
-    constructor(fields = { name: "" }) {
+    constructor(fields = {} as CategoryDocument) {
         super("categories")
 
         this.fields = {

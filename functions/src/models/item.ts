@@ -6,19 +6,19 @@ export type ItemDocument = Document & {
     qt: number
     price: number
     productId: string
-    categoryIds: Array<string>
+    categoryIds?: Array<string>
 }
 
 export class Item extends Base {
     fields: ItemDocument
-    constructor(fields = { qt: 1, price: 0, productId: "", categoryIds: [] }) {
+    constructor(fields = {} as ItemDocument) {
         super("items")
 
         this.fields = {
             qt: fields.qt,
             price: fields.price,
             productId: fields.productId,
-            categoryIds: fields.categoryIds,
+            categoryIds: fields.categoryIds ?? undefined,
         }
         for (const field in this.fields) {
             if (this.fields[field] === undefined) delete this.fields[field]
@@ -39,7 +39,8 @@ export class Item extends Base {
     }
 
     async categories() {
-        const categories = []
+        const categories: Category[] = []
+        if (!this.fields.categoryIds) return categories
         for (const categoryId of this.fields.categoryIds) {
             const category = await new Category().load(categoryId)
             if (category) categories.push(category)

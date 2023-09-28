@@ -2,7 +2,7 @@ import { Base, Document } from "./base"
 
 export type ActionDocument = Document & {
     type: ActionTypes
-    data: object
+    data?: object
     desc?: string
 }
 
@@ -16,7 +16,7 @@ export enum ActionTypes {
 
 export class Action extends Base {
     fields: ActionDocument
-    constructor(fields = { type: ActionTypes.NONE, data: {}, desc: undefined }) {
+    constructor(fields = {} as ActionDocument) {
         super("actions")
 
         this.fields = {

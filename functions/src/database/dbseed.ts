@@ -3,6 +3,7 @@ import { db } from "../main"
 (async () => {
   console.log("-- starting seeds")
   const snap = await db.collection("seeds").get()
+  console.log("snap.size: ", snap.size)
   if (snap.size) return
   await db.collection("seeds").add({
     seeded: true,

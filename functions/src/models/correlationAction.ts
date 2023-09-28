@@ -1,4 +1,4 @@
-import { Action } from "./action"
+import { Action, ActionDocument } from "./action"
 import { Base, Document } from "./base"
 import { Category } from "./category"
 import { Product } from "./product"
@@ -16,7 +16,7 @@ export enum EntityTypes {
 
 export class CorrelationAction extends Base {
     fields: CorrelationActionDocument
-    constructor(fields = { entity: EntityTypes.PRODUCT, entityId: "", actionId: "" }) {
+    constructor(fields = {} as CorrelationActionDocument) {
         super("correlationActions")
 
         this.fields = {
@@ -38,7 +38,7 @@ export class CorrelationAction extends Base {
         return await super.save()
     }
 
-    async loadByProducts(products: Array<Product>, loadByCategory = true): Promise<Array<CorrelationAction>> {
+    async loadByProducts(products: Array<Product>): Promise<Array<CorrelationAction>> {
         const correlationActions: Array<CorrelationAction> = []
         for (const product of products) {
             const productCorrelationAction = await this.loadByEntity(EntityTypes.PRODUCT, product.id)
@@ -63,6 +63,6 @@ export class CorrelationAction extends Base {
     }
 
     async action() {
-        return await new Action().load(this.fields.actionId)
+        return await new Action({} as ActionDocument).load(this.fields.actionId)
     }
 }

@@ -20,9 +20,9 @@ export class OrderController {
             return res.json({
                 "order": order.fields,
             })
-        } catch (error) {
+        } catch (error: any) {
             return res.json({
-                error,
+                error: error.message,
             })
         }
     }

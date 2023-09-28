@@ -9,7 +9,7 @@ export type ProductDocument = Document & {
 
 export class Product extends Base {
     fields: ProductDocument
-    constructor(fields = { price: 0, title: "", categoryId: undefined }) {
+    constructor(fields = {} as ProductDocument) {
         super("products")
 
         this.fields = {

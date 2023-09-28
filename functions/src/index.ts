@@ -8,6 +8,7 @@ import "./database/dbseed"
 
 export const main = express()
 
+main.use(express.json())
 main.use(crossDomain)
 main.use(middlewareExample)
 main.use(app)
