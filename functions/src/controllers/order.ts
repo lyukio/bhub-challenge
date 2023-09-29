@@ -21,9 +21,9 @@ export class OrderController {
                 "order": order.fields,
                 triggeredActions,
             })
-        } catch (error: any) {
+        } catch (error) {
             return res.json({
-                error: error.message,
+                error,
             })
         }
     }
