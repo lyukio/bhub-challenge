@@ -10,7 +10,7 @@ Endpoints: https://documenter.getpostman.com/view/3683235/2s9YCARW1u
 
 ### 📝 Planejamento
 
-Neste item falarei um pouco do que pensei antes (e um pouco do durante) o desenvolvimento da solução.
+Neste item falarei um pouco do que pensei antes (e um pouco durante) o desenvolvimento da solução.
 É aconselhável dar uma olhada por cima no diagrama no item "Documentação" acima antes de continuar.
 
 Primeiramente, li o PDF do desafio enquanto fui anotando pontos importantes em um documento no Notion.
@@ -19,8 +19,18 @@ Agora partindo do ponto que eu tinha tomado nota dos projeto e suas (possíveis)
 
 ### 🎯 Solução
 
+Após o planejamento, decidi que iria fazer a solução desde ter a classe `User` até as classes suficientes relacionadas a pedidos/pagamentos para simular a ativação de ações variáveis/customizáveis dependendo do que se tratar o pagamento, referente as regras citadas no PDF do desafio.
 
+Explicando a solução separadas pelas entidades:
+User: responsável pelos registros de usuários. Em um nível maior de solução pode ser adicionado uma propriedade para controlar o nível de associado.
+Product: representação do produto disponível, e sem "ligação" com pedidos ainda.
+Item: diferente do `Product`, este seria uma representação do produto no momento do pedido. Logo se o produto for alterado (preço, por exemplo) após isso, o `Item` se mantém como foi pedido naquele momento.
+Order: responsável pelos pedidos, status de pagamentos e quais itens estão no pedido.
+Category: representa as categorias de produtos/itens.
+Action: ações que podem ser ativadas dependendo de alguma relação/regra.
+CorrelationAction: responsável por correlacionar as ações que devem ser ativadas. Por exemplo: quando um produto X ser pedido ou quando um produto da categoria Y ser pedido.
 
+Pensando numa solução incluindo front-end, imagino uma área para admin para gerenciar as `Action` e as `CorrelationAction`.
 
 ### 📋 Pré-requisitos
 
