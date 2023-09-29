@@ -15,10 +15,11 @@ export class OrderController {
             const order = new Order(status, itemIds, userId)
             if (!await order.create()) return res.status(422).json({ "response": "error on creating order" })
             const actions: Array<Action> = await this.getActions(order)
-            await this.triggerActions(actions)
+            const triggeredActions = await this.triggerActions(actions)
             order.fields.id = order.id
             return res.json({
                 "order": order.fields,
+                triggeredActions,
             })
         } catch (error: any) {
             return res.json({
@@ -45,9 +46,11 @@ export class OrderController {
     }
 
     async triggerActions(actions: Array<Action>) {
+        const triggeredActions = []
         for (const action of actions) {
-            await action.trigger()
+            triggeredActions.push(await action.trigger())
         }
+        return triggeredActions
     }
 
     async route_getJSON(req: Request, res: Response) {
@@ -60,16 +63,6 @@ export class OrderController {
             "order": order.fields,
         })
     }
-
-    // async route_getOtherExampleExamplesJSON(req: Request, res: Response) {
-    //     const otherExampleId = res.get("otherExampleId") || req.query.otherExampleId
-    //     if (!otherExampleId) return res.status(400).json({ "response": "otherExampleId is necessary" })
-    //     const examples: any = await new User().loadByProperty("otherExampleId", otherExampleId)
-    //     if (!examples) return res.status(422).json({ "response": "error on get examples by otherExampleId" })
-    //     return res.json({
-    //         examples,
-    //     })
-    // }
 }
 
 export const instance = new OrderController()

@@ -40,5 +40,6 @@ export class Action extends Base {
 
     async trigger() {
         console.log(`${this.fields.type} event triggered`)
+        return this.fields.type
     }
 }

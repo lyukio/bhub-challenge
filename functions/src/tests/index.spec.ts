@@ -80,6 +80,9 @@ describe("order", () => {
             expect(response.status).toBe(200)
             expect(response.body).toEqual({
                 order: expect.objectContaining(dto),
+                triggeredActions: [
+                    ActionTypes.DUPLICATED_DELIVERY_NOTE,
+                ],
             })
         })
     })
