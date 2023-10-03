@@ -6,6 +6,8 @@ Desafio BHub é um projeto criado com o intuito de mostrar um pouco das minhas h
 
 Diagramas: https://miro.com/app/board/uXjVMkmuoBI=/?share_link_id=83813679766
 
+Nos diagramas acima contém um pouco do que pensei em questão de soluções, incluindo essa feita, obviamente.
+
 Endpoints: https://documenter.getpostman.com/view/3683235/2s9YCARW1u
 
 ### 📝 Planejamento
