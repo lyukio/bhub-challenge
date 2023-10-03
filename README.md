@@ -32,6 +32,8 @@ CorrelationAction: responsável por correlacionar as ações que devem ser ativa
 
 Pensando numa solução incluindo front-end, imagino uma área para admin para gerenciar as `Action` e as `CorrelationAction`.
 
+É importante dizer também que o momento da ativação de uma `Action` é verificada na criação de um `Order`, ou seja, quando um novo pedido for feito é verificado todas as "regras" utilizando itens, categorias e o `CorrelationAction`. O teste realizado em jest exemplifica um caso desse para ficar mais claro.
+
 ### 📋 Pré-requisitos
 
 ```
